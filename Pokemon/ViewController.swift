@@ -97,14 +97,9 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         let contact = contacts[indexPath.row]
         let addVC = AddViewController()
         
-
             addVC.configureView(with: contact)
+            addVC.title = contact.name
 
-//        addVC.nameTextView.text = contact?.name
-//        addVC.phoneNumberTextView.text = contact?.phoneNumber
-//        if let imageData = contact?.profileImage {
-//            addVC.profileImageView.image = UIImage(data: imageData)
-//        }
         navigationController?.pushViewController(addVC, animated: true)
         
     }
@@ -193,10 +188,10 @@ class AddViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "연락처 추가"
         view.backgroundColor = .white
         setupNavigationBar()
         setupUI()
+        title = "연락처 추가"
         
         if let name = nameTextView.text, !name.isEmpty {
             nameTextView.text = name
@@ -298,8 +293,6 @@ class AddViewController: UIViewController {
             make.right.equalToSuperview().offset(-16)
             make.height.equalTo(40)
         }
-        
-        
     }
     
     @objc func randomImageButtonTapped() {

@@ -36,6 +36,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         view.backgroundColor = .white
         
         setupTableView()
+        tableView.separatorStyle = .none
         loadContactDetails()
         
         let addButton = UIBarButtonItem(title: "추가", style: .plain, target: self, action: #selector(addButtonTapped))
@@ -99,7 +100,6 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         addVC.contact = contact
 
         navigationController?.pushViewController(addVC, animated: true)
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -113,6 +113,12 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.profileImageView.image = UIImage(named: "profile_placeholder")
         cell.nameLabel.text = contact.name
         cell.phoneNumberLabel.text = contact.phoneNumber
+        
+        let separatorWidth: CGFloat = 368
+        let separatorHeight: CGFloat = 1
+        let separator = UIView(frame: CGRect(x: (cell.frame.width - separatorWidth) / 2, y: cell.frame.height - separatorHeight, width: separatorWidth, height: separatorHeight))
+        separator.backgroundColor = .lightGray
+        cell.addSubview(separator)
         
         if let profileImageData = contact.profileImage {
             cell.profileImageView.image = UIImage(data: profileImageData)
@@ -243,7 +249,6 @@ class AddViewController: UIViewController {
             } catch {
                 print("DEBUG: Failed To Save Contact.")
             }
-            
         }
         
         func setupUI() {
@@ -315,7 +320,6 @@ class AddViewController: UIViewController {
                        let imageUrl = URL(string: imageUrlString) {
                         DispatchQueue.main.async {
                             self.profileImageView.loadImage(from: imageUrl)
-                            
                         }
                     }
                 } catch {

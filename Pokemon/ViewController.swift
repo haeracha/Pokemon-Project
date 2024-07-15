@@ -11,14 +11,24 @@ import CoreData
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    var container: NSPersistentContainer!
+    
+    var contacts: [Contact] = []
     let tableView = UITableView()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        fetchContacts()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        self.container = appDelegate.persistentContainer
+        
+//        createData(name: "", phoneNumber: "", profileImage: "")
+//        readAllData()
         
         title = "친구 목록"
         view.backgroundColor = .white
@@ -38,6 +48,53 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: nil)
     }
     
+//    func createData(name: String, phoneNumber: String, profileImage: String) {
+//        guard let entity = NSEntityDescription.entity(forEntityName: "Contact", in: self.container.viewContext) else { return }
+//        let newContact = NSManagedObject(entity: entity, insertInto: self.container.viewContext)
+//        newContact.setValue(name, forKey: "name")
+//        newContact.setValue(phoneNumber, forKey: "phoneNumber")
+//        newContact.setValue(profileImage, forKey: "profileImage")
+//        
+//        do {
+//            try self.container.viewContext.save()
+//            print("DEBUG: Saved Context.")
+//        } catch {
+//            print("DEBUG: Failed to save Context.")
+//        }
+//    }
+//    
+//    func readAllData() {
+//        do {
+//            let contacts = try self.container.viewContext.fetch(Contact.fetchRequest())
+//            
+//            for contact in contacts as [NSManagedObject] {
+//                if let name = contact.value(forKey: "name") as? String,
+//                   let phoneNumber = contact.value(forKey: "phoneNumber") as? String, let profileImage = contact.value(forKey: "profileImage") as? String {
+//                    print("name: \(name), phoneNumber: \(phoneNumber), profileImage: \(profileImage)")
+//                }
+//            }
+//        } catch {
+//            print("DEBUG: Failed To Read Data")
+//        }
+//    }
+    
+    func fetchContacts() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appDelegate.persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Contact> = Contact.fetchRequest()
+        
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            contacts = try context.fetch(fetchRequest)
+            tableView.reloadData()
+        } catch {
+            print("DEBUG: Failed To Fetch Contacts. \(error.localizedDescription)")
+        }
+    }
+    
+    
     @objc func addButtonTapped() {
         let addPage = AddViewController()
         navigationController?.pushViewController(addPage, animated: true)
@@ -56,22 +113,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
-        //      return contacts.count
+//        return 20
+        return contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as! ContactCell
+        let contact = contacts[indexPath.row]
         cell.profileImageView.image = UIImage(named: "profile_placeholder")
-        cell.nameLabel.text = "이름"
-        cell.phoneNumberLabel.text = "010-1234-5678"
-        return cell
+        cell.nameLabel.text = contact.name
+        cell.phoneNumberLabel.text = contact.phoneNumber
+        if let profileImageData = contact.profileImage {
+            cell.profileImageView.image = UIImage(data: profileImageData)
+        } else {
+            cell.profileImageView.image = UIImage(named: "profile")
+        }
         
-        //        let contact = contacts[indexPath.row]
-        //        cell.profileImageView.loadImage(from: URL(string: contact.profileImageURL ?? "")!)
-        //        cell.nameLabel.text = contact.name
-        //        cell.phoneLabel.text = contact.phoneNumber
-        //        return cell
+                cell.nameLabel.text = contact.name ?? "이름없음"
+                cell.phoneNumberLabel.text = contact.phoneNumber ?? "번호없음"
+                return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -150,34 +210,24 @@ class AddViewController: UIViewController {
     
     @objc func doneButtonTapped() {
         print("DEBUG: Done Button Tapped.")
-        //        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        //        let context = appDelegate.persistentContainer.viewContext
-        //
-        //        let newContact = Contact(context: context)
-        //        newContact.name = nameTextView.text
-        //        newContact.phoneNumber = phoneNumberTextView.text
-        //        if let imageData = profileImageView.image?.pngData() {
-        ////            newContact.profileImageURL = imageData
-        //        }
-        //
-        //        do {
-        //            try context.save()
-        //            navigationController?.popViewController(animated: true)
-        //        } catch {
-        //            print("DEBUG: Failed To Save Contact.")
-        //        }
-        //
-        //
-        //        let exampleImageURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
-        //        newContact.profileImageURL = exampleImageURL
-        //        do {
-        //            try context.save()
-        //            print("DEBUG: \(newContact) Saved.")
-        //
-        //            navigationController?.popViewController(animated: true)
-        //        } catch {
-        //            print("DEBUG: Failed To Save. \(error.localizedDescription)")
-        //        }
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                let context = appDelegate.persistentContainer.viewContext
+        
+                let newContact = Contact(context: context)
+                newContact.name = nameTextView.text
+                newContact.phoneNumber = phoneNumberTextView.text
+        
+                if let imageData = profileImageView.image?.pngData() {
+                    newContact.profileImage = imageData
+                }
+        
+                do {
+                    try context.save()
+                    navigationController?.popViewController(animated: true)
+                } catch {
+                    print("DEBUG: Failed To Save Contact.")
+                }
+        
     }
     
     //    @objc func backButtonTapped() {

@@ -16,6 +16,9 @@
 		CBAF3B1F2C4439860098E934 /* PokemonUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B1E2C4439860098E934 /* PokemonUITests.swift */; };
 		CBAF3B212C4439860098E934 /* PokemonUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B202C4439860098E934 /* PokemonUITestsLaunchTests.swift */; };
 		CBAF3B2F2C443B870098E934 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBAF3B2E2C443B870098E934 /* SnapKit */; };
+		CBAF3B3B2C457EA80098E934 /* ContactsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B392C457EA80098E934 /* ContactsModel.xcdatamodeld */; };
+		CBAF3B462C45999A0098E934 /* Contact+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B442C45999A0098E934 /* Contact+CoreDataClass.swift */; };
+		CBAF3B472C45999A0098E934 /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B452C45999A0098E934 /* Contact+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,9 @@
 		CBAF3B1A2C4439860098E934 /* PokemonUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PokemonUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBAF3B1E2C4439860098E934 /* PokemonUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonUITests.swift; sourceTree = "<group>"; };
 		CBAF3B202C4439860098E934 /* PokemonUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CBAF3B3A2C457EA80098E934 /* ContactsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ContactsModel.xcdatamodel; sourceTree = "<group>"; };
+		CBAF3B442C45999A0098E934 /* Contact+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataClass.swift"; sourceTree = "<group>"; };
+		CBAF3B452C45999A0098E934 /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +85,8 @@
 		CBAF3AF12C4439820098E934 = {
 			isa = PBXGroup;
 			children = (
+				CBAF3B442C45999A0098E934 /* Contact+CoreDataClass.swift */,
+				CBAF3B452C45999A0098E934 /* Contact+CoreDataProperties.swift */,
 				CBAF3AFC2C4439820098E934 /* Pokemon */,
 				CBAF3B132C4439860098E934 /* PokemonTests */,
 				CBAF3B1D2C4439860098E934 /* PokemonUITests */,
@@ -102,6 +110,7 @@
 				CBAF3AFD2C4439820098E934 /* AppDelegate.swift */,
 				CBAF3AFF2C4439820098E934 /* SceneDelegate.swift */,
 				CBAF3B012C4439820098E934 /* ViewController.swift */,
+				CBAF3B392C457EA80098E934 /* ContactsModel.xcdatamodeld */,
 				CBAF3B062C4439860098E934 /* Assets.xcassets */,
 				CBAF3B082C4439860098E934 /* LaunchScreen.storyboard */,
 				CBAF3B0B2C4439860098E934 /* Info.plist */,
@@ -264,7 +273,10 @@
 			files = (
 				CBAF3B022C4439820098E934 /* ViewController.swift in Sources */,
 				CBAF3AFE2C4439820098E934 /* AppDelegate.swift in Sources */,
+				CBAF3B3B2C457EA80098E934 /* ContactsModel.xcdatamodeld in Sources */,
 				CBAF3B002C4439820098E934 /* SceneDelegate.swift in Sources */,
+				CBAF3B462C45999A0098E934 /* Contact+CoreDataClass.swift in Sources */,
+				CBAF3B472C45999A0098E934 /* Contact+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,6 +632,20 @@
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		CBAF3B392C457EA80098E934 /* ContactsModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CBAF3B3A2C457EA80098E934 /* ContactsModel.xcdatamodel */,
+			);
+			currentVersion = CBAF3B3A2C457EA80098E934 /* ContactsModel.xcdatamodel */;
+			name = ContactsModel.xcdatamodeld;
+			path = "/Users/t2023-m0019/Desktop/Pokemon/Pokemon/ContactsModel.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = CBAF3AF22C4439820098E934 /* Project object */;
 }

@@ -94,14 +94,17 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedContact = contacts[indexPath.row]
+        let contact = contacts[indexPath.row]
         let addVC = AddViewController()
         
-        addVC.nameTextView.text = contact?.name
-        addVC.phoneNumberTextView.text = contact?.phoneNumber
-        if let imageData = contact?.profileImage {
-            addVC.profileImageView.image = UIImage(data: imageData)
-        }
+
+            addVC.configureView(with: contact)
+
+//        addVC.nameTextView.text = contact?.name
+//        addVC.phoneNumberTextView.text = contact?.phoneNumber
+//        if let imageData = contact?.profileImage {
+//            addVC.profileImageView.image = UIImage(data: imageData)
+//        }
         navigationController?.pushViewController(addVC, animated: true)
         
     }
@@ -198,8 +201,17 @@ class AddViewController: UIViewController {
         if let name = nameTextView.text, !name.isEmpty {
             nameTextView.text = name
         }
+        
         if let phoneNumber = phoneNumberTextView.text, !phoneNumber.isEmpty {
             phoneNumberTextView.text = phoneNumber
+        }
+    }
+    
+    func configureView(with contact: Contact) {
+        nameTextView.text = contact.name
+        phoneNumberTextView.text = contact.phoneNumber
+        if let imageData = contact.profileImage {
+            profileImageView.image = UIImage(data: imageData)
         }
     }
     
@@ -207,6 +219,8 @@ class AddViewController: UIViewController {
         let doneButton = UIBarButtonItem(title: "적용", style: .plain, target: self, action: #selector(doneButtonTapped))
         navigationItem.rightBarButtonItem = doneButton
     }
+    
+    
     
     @objc func doneButtonTapped() {
         print("DEBUG: Done Button Tapped.")
@@ -284,6 +298,8 @@ class AddViewController: UIViewController {
             make.right.equalToSuperview().offset(-16)
             make.height.equalTo(40)
         }
+        
+        
     }
     
     @objc func randomImageButtonTapped() {
@@ -309,7 +325,6 @@ class AddViewController: UIViewController {
                 print("DEBUG: \(error) Error Occured.")
             }
         }
-        
         task.resume()
     }
 }

@@ -10,12 +10,12 @@
 		CBAF3AFE2C4439820098E934 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3AFD2C4439820098E934 /* AppDelegate.swift */; };
 		CBAF3B002C4439820098E934 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3AFF2C4439820098E934 /* SceneDelegate.swift */; };
 		CBAF3B022C4439820098E934 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B012C4439820098E934 /* ViewController.swift */; };
-		CBAF3B052C4439820098E934 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CBAF3B042C4439820098E934 /* Base */; };
 		CBAF3B072C4439860098E934 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBAF3B062C4439860098E934 /* Assets.xcassets */; };
 		CBAF3B0A2C4439860098E934 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = CBAF3B092C4439860098E934 /* Base */; };
 		CBAF3B152C4439860098E934 /* PokemonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B142C4439860098E934 /* PokemonTests.swift */; };
 		CBAF3B1F2C4439860098E934 /* PokemonUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B1E2C4439860098E934 /* PokemonUITests.swift */; };
 		CBAF3B212C4439860098E934 /* PokemonUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBAF3B202C4439860098E934 /* PokemonUITestsLaunchTests.swift */; };
+		CBAF3B2F2C443B870098E934 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CBAF3B2E2C443B870098E934 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +40,6 @@
 		CBAF3AFD2C4439820098E934 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBAF3AFF2C4439820098E934 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		CBAF3B012C4439820098E934 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		CBAF3B042C4439820098E934 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CBAF3B062C4439860098E934 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBAF3B092C4439860098E934 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBAF3B0B2C4439860098E934 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBAF3B2F2C443B870098E934 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,7 +102,6 @@
 				CBAF3AFD2C4439820098E934 /* AppDelegate.swift */,
 				CBAF3AFF2C4439820098E934 /* SceneDelegate.swift */,
 				CBAF3B012C4439820098E934 /* ViewController.swift */,
-				CBAF3B032C4439820098E934 /* Main.storyboard */,
 				CBAF3B062C4439860098E934 /* Assets.xcassets */,
 				CBAF3B082C4439860098E934 /* LaunchScreen.storyboard */,
 				CBAF3B0B2C4439860098E934 /* Info.plist */,
@@ -143,6 +142,9 @@
 			dependencies = (
 			);
 			name = Pokemon;
+			packageProductDependencies = (
+				CBAF3B2E2C443B870098E934 /* SnapKit */,
+			);
 			productName = Pokemon;
 			productReference = CBAF3AFA2C4439820098E934 /* Pokemon.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +217,9 @@
 				Base,
 			);
 			mainGroup = CBAF3AF12C4439820098E934;
+			packageReferences = (
+				CBAF3B2D2C443B870098E934 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = CBAF3AFB2C4439820098E934 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -233,7 +238,6 @@
 			files = (
 				CBAF3B072C4439860098E934 /* Assets.xcassets in Resources */,
 				CBAF3B0A2C4439860098E934 /* Base in Resources */,
-				CBAF3B052C4439820098E934 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,14 +301,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		CBAF3B032C4439820098E934 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				CBAF3B042C4439820098E934 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		CBAF3B082C4439860098E934 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -447,7 +443,6 @@
 				INFOPLIST_FILE = Pokemon/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -475,7 +470,6 @@
 				INFOPLIST_FILE = Pokemon/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -607,6 +601,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CBAF3B2D2C443B870098E934 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CBAF3B2E2C443B870098E934 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CBAF3B2D2C443B870098E934 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CBAF3AF22C4439820098E934 /* Project object */;
 }

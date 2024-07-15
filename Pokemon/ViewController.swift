@@ -27,9 +27,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.container = appDelegate.persistentContainer
         
-//        createData(name: "", phoneNumber: "", profileImage: "")
-//        readAllData()
-        
         title = "친구 목록"
         view.backgroundColor = .white
         
@@ -39,7 +36,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.navigationItem.rightBarButtonItem = addButton
         
-        
         if let navigationBar = self.navigationController?.navigationBar {
             navigationBar.titleTextAttributes = [
                 NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 24)]
@@ -47,36 +43,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: nil)
     }
-    
-//    func createData(name: String, phoneNumber: String, profileImage: String) {
-//        guard let entity = NSEntityDescription.entity(forEntityName: "Contact", in: self.container.viewContext) else { return }
-//        let newContact = NSManagedObject(entity: entity, insertInto: self.container.viewContext)
-//        newContact.setValue(name, forKey: "name")
-//        newContact.setValue(phoneNumber, forKey: "phoneNumber")
-//        newContact.setValue(profileImage, forKey: "profileImage")
-//        
-//        do {
-//            try self.container.viewContext.save()
-//            print("DEBUG: Saved Context.")
-//        } catch {
-//            print("DEBUG: Failed to save Context.")
-//        }
-//    }
-//    
-//    func readAllData() {
-//        do {
-//            let contacts = try self.container.viewContext.fetch(Contact.fetchRequest())
-//            
-//            for contact in contacts as [NSManagedObject] {
-//                if let name = contact.value(forKey: "name") as? String,
-//                   let phoneNumber = contact.value(forKey: "phoneNumber") as? String, let profileImage = contact.value(forKey: "profileImage") as? String {
-//                    print("name: \(name), phoneNumber: \(phoneNumber), profileImage: \(profileImage)")
-//                }
-//            }
-//        } catch {
-//            print("DEBUG: Failed To Read Data")
-//        }
-//    }
     
     func fetchContacts() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -93,7 +59,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("DEBUG: Failed To Fetch Contacts. \(error.localizedDescription)")
         }
     }
-    
     
     @objc func addButtonTapped() {
         let addPage = AddViewController()
@@ -113,25 +78,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 20
         return contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as! ContactCell
         let contact = contacts[indexPath.row]
+        
         cell.profileImageView.image = UIImage(named: "profile_placeholder")
         cell.nameLabel.text = contact.name
         cell.phoneNumberLabel.text = contact.phoneNumber
+        
         if let profileImageData = contact.profileImage {
             cell.profileImageView.image = UIImage(data: profileImageData)
         } else {
             cell.profileImageView.image = UIImage(named: "profile")
         }
         
-                cell.nameLabel.text = contact.name ?? "이름없음"
-                cell.phoneNumberLabel.text = contact.phoneNumber ?? "번호없음"
-                return cell
+        cell.nameLabel.text = contact.name ?? "이름없음"
+        cell.phoneNumberLabel.text = contact.phoneNumber ?? "번호없음"
+        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -204,35 +170,29 @@ class AddViewController: UIViewController {
     func setupNavigationBar() {
         let doneButton = UIBarButtonItem(title: "적용", style: .plain, target: self, action: #selector(doneButtonTapped))
         navigationItem.rightBarButtonItem = doneButton
-        //        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButtonTapped))
-        //        navigationItem.backBarButtonItem = backButton
     }
     
     @objc func doneButtonTapped() {
         print("DEBUG: Done Button Tapped.")
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-                let context = appDelegate.persistentContainer.viewContext
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let context = appDelegate.persistentContainer.viewContext
         
-                let newContact = Contact(context: context)
-                newContact.name = nameTextView.text
-                newContact.phoneNumber = phoneNumberTextView.text
+        let newContact = Contact(context: context)
+        newContact.name = nameTextView.text
+        newContact.phoneNumber = phoneNumberTextView.text
         
-                if let imageData = profileImageView.image?.pngData() {
-                    newContact.profileImage = imageData
-                }
+        if let imageData = profileImageView.image?.pngData() {
+            newContact.profileImage = imageData
+        }
         
-                do {
-                    try context.save()
-                    navigationController?.popViewController(animated: true)
-                } catch {
-                    print("DEBUG: Failed To Save Contact.")
-                }
+        do {
+            try context.save()
+            navigationController?.popViewController(animated: true)
+        } catch {
+            print("DEBUG: Failed To Save Contact.")
+        }
         
     }
-    
-    //    @objc func backButtonTapped() {
-    //        print("DEBUG: Back Button Tapped.")
-    //    }
     
     func setupUI() {
         
@@ -310,6 +270,7 @@ class AddViewController: UIViewController {
                 print("DEBUG: \(error) Error Occured.")
             }
         }
+        
         task.resume()
     }
 }

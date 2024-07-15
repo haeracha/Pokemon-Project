@@ -9,10 +9,15 @@ import UIKit
 import SnapKit
 import CoreData
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+let profileImageView = UIImageView()
+let randomImageButton = UIButton()
+let nameTextView = UITextView()
+let phoneNumberTextView = UITextView()
+
+class ContactViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var container: NSPersistentContainer!
-    
+    var contact: Contact?
     var contacts: [Contact] = []
     let tableView = UITableView()
     
@@ -26,11 +31,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.container = appDelegate.persistentContainer
-        
+
         title = "친구 목록"
         view.backgroundColor = .white
         
         setupTableView()
+        loadContactDetails()
         
         let addButton = UIBarButtonItem(title: "추가", style: .plain, target: self, action: #selector(addButtonTapped))
         
@@ -42,6 +48,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: nil)
+    }
+    
+    func loadContactDetails() {
+        if let contact = contact {
+            nameTextView.text = contact.name
+            phoneNumberTextView.text = contact.phoneNumber
+            if let profileImageData = contact.profileImage {
+                profileImageView.image = UIImage(data: profileImageData)
+            }
+        }
     }
     
     func fetchContacts() {
@@ -75,6 +91,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ContactCell.self, forCellReuseIdentifier: "ContactCell")
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedContact = contacts[indexPath.row]
+        let addVC = AddViewController()
+        
+        addVC.nameTextView.text = contact?.name
+        addVC.phoneNumberTextView.text = contact?.phoneNumber
+        if let imageData = contact?.profileImage {
+            addVC.profileImageView.image = UIImage(data: imageData)
+        }
+        navigationController?.pushViewController(addVC, animated: true)
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -165,6 +194,13 @@ class AddViewController: UIViewController {
         view.backgroundColor = .white
         setupNavigationBar()
         setupUI()
+        
+        if let name = nameTextView.text, !name.isEmpty {
+            nameTextView.text = name
+        }
+        if let phoneNumber = phoneNumberTextView.text, !phoneNumber.isEmpty {
+            phoneNumberTextView.text = phoneNumber
+        }
     }
     
     func setupNavigationBar() {
@@ -187,6 +223,9 @@ class AddViewController: UIViewController {
         
         do {
             try context.save()
+            if let viewController = navigationController?.viewControllers.first(where: { $0 is ContactViewController }) as? ContactViewController {
+                viewController.fetchContacts()
+            }
             navigationController?.popViewController(animated: true)
         } catch {
             print("DEBUG: Failed To Save Contact.")

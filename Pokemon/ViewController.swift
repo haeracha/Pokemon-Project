@@ -96,9 +96,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let contact = contacts[indexPath.row]
         let addVC = AddViewController()
-        
-            addVC.configureView(with: contact)
-            addVC.title = contact.name
+        addVC.contact = contact
 
         navigationController?.pushViewController(addVC, animated: true)
         
@@ -180,6 +178,7 @@ class ContactCell: UITableViewCell {
 
 class AddViewController: UIViewController {
     
+    var contact: Contact?
     let profileImageView = UIImageView()
     let randomImageButton = UIButton()
     let nameTextView = UITextView()
@@ -187,148 +186,153 @@ class AddViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = contact != nil ? contact!.name : "연락처 추가"
         view.backgroundColor = .white
         setupNavigationBar()
         setupUI()
-        title = "연락처 추가"
         
-        if let name = nameTextView.text, !name.isEmpty {
-            nameTextView.text = name
-        }
-        
-        if let phoneNumber = phoneNumberTextView.text, !phoneNumber.isEmpty {
-            phoneNumberTextView.text = phoneNumber
-        }
-    }
-    
-    func configureView(with contact: Contact) {
-        nameTextView.text = contact.name
-        phoneNumberTextView.text = contact.phoneNumber
-        if let imageData = contact.profileImage {
-            profileImageView.image = UIImage(data: imageData)
-        }
-    }
-    
-    func setupNavigationBar() {
-        let doneButton = UIBarButtonItem(title: "적용", style: .plain, target: self, action: #selector(doneButtonTapped))
-        navigationItem.rightBarButtonItem = doneButton
-    }
-    
-    
-    
-    @objc func doneButtonTapped() {
-        print("DEBUG: Done Button Tapped.")
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let context = appDelegate.persistentContainer.viewContext
-        
-        let newContact = Contact(context: context)
-        newContact.name = nameTextView.text
-        newContact.phoneNumber = phoneNumberTextView.text
-        
-        if let imageData = profileImageView.image?.pngData() {
-            newContact.profileImage = imageData
-        }
-        
-        do {
-            try context.save()
-            if let viewController = navigationController?.viewControllers.first(where: { $0 is ContactViewController }) as? ContactViewController {
-                viewController.fetchContacts()
+        if let contact = contact {
+            nameTextView.text = contact.name
+            phoneNumberTextView.text = contact.phoneNumber
+            if let imageData = contact.profileImage {
+                profileImageView.image = UIImage(data: imageData)
             }
-            navigationController?.popViewController(animated: true)
-        } catch {
-            print("DEBUG: Failed To Save Contact.")
         }
         
-    }
-    
-    func setupUI() {
-        
-        profileImageView.layer.cornerRadius = 120
-        profileImageView.clipsToBounds = true
-        profileImageView.layer.borderWidth = 1
-        profileImageView.layer.borderColor = UIColor.black.cgColor
-        
-        view.addSubview(profileImageView)
-        
-        profileImageView.snp.makeConstraints { make in
-            make.width.height.equalTo(240)
-            make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(100)
+        func configureView(with contact: Contact) {
+            nameTextView.text = contact.name
+            phoneNumberTextView.text = contact.phoneNumber
+            if let imageData = contact.profileImage {
+                profileImageView.image = UIImage(data: imageData)
+            }
         }
         
-        randomImageButton.setTitle("랜덤 이미지 생성", for: .normal)
-        randomImageButton.setTitleColor(.gray, for: .normal)
-        randomImageButton.addTarget(self, action: #selector(randomImageButtonTapped), for: .touchUpInside)
-        
-        view.addSubview(randomImageButton)
-        
-        randomImageButton.snp.makeConstraints { make in
-            make.top.equalTo(profileImageView.snp.bottom).offset(16)
-            make.centerX.equalToSuperview()
-        }
-        
-        nameTextView.layer.borderWidth = 1
-        nameTextView.layer.borderColor = UIColor.lightGray.cgColor
-        nameTextView.layer.cornerRadius = 5
-        
-        view.addSubview(nameTextView)
-        
-        nameTextView.snp.makeConstraints { make in
-            make.top.equalTo(randomImageButton.snp.bottom).offset(20)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.height.equalTo(40)
-        }
-        
-        phoneNumberTextView.layer.borderWidth = 1
-        phoneNumberTextView.layer.borderColor = UIColor.lightGray.cgColor
-        phoneNumberTextView.layer.cornerRadius = 5
-        
-        view.addSubview(phoneNumberTextView)
-        
-        phoneNumberTextView.snp.makeConstraints { make in
-            make.top.equalTo(nameTextView.snp.bottom).offset(20)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-            make.height.equalTo(40)
+        func setupNavigationBar() {
+            let doneButton = UIBarButtonItem(title: "적용", style: .plain, target: self, action: #selector(doneButtonTapped))
+            navigationItem.rightBarButtonItem = doneButton
         }
     }
-    
-    @objc func randomImageButtonTapped() {
-        print("DEBUG: Random Image Button Tapped.")
-        let randomID = Int.random(in: 1...1000)
-        let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(randomID)")!
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else {
-                print("DEBUG: \(String(describing: error)) Failed To Load.")
-                return
+        
+        @objc func doneButtonTapped() {
+            print("DEBUG: Done Button Tapped.")
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            let context = appDelegate.persistentContainer.viewContext
+            
+            
+            if let contact = contact {
+                contact.name = nameTextView.text
+                contact.phoneNumber = phoneNumberTextView.text
+                if let imageData = profileImageView.image?.pngData() {
+                    contact.profileImage = imageData
+                }
+            } else {
+                let newContact = Contact(context: context)
+                newContact.name = nameTextView.text
+                newContact.phoneNumber = phoneNumberTextView.text
+                
+                if let imageData = profileImageView.image?.pngData() {
+                    newContact.profileImage = imageData
+                }
             }
             do {
-                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                   let sprites = json["sprites"] as? [String: Any],
-                   let imageUrlString = sprites["front_default"] as? String,
-                   let imageUrl = URL(string: imageUrlString) {
-                    DispatchQueue.main.async {
-                        self.profileImageView.loadImage(from: imageUrl)
-                        
-                    }
+                try context.save()
+                if let viewController = navigationController?.viewControllers.first(where: { $0 is ContactViewController }) as? ContactViewController {
+                    viewController.fetchContacts()
                 }
+                navigationController?.popViewController(animated: true)
             } catch {
-                print("DEBUG: \(error) Error Occured.")
+                print("DEBUG: Failed To Save Contact.")
+            }
+            
+        }
+        
+        func setupUI() {
+            
+            profileImageView.layer.cornerRadius = 120
+            profileImageView.clipsToBounds = true
+            profileImageView.layer.borderWidth = 1
+            profileImageView.layer.borderColor = UIColor.black.cgColor
+            
+            view.addSubview(profileImageView)
+            
+            profileImageView.snp.makeConstraints { make in
+                make.width.height.equalTo(240)
+                make.centerX.equalToSuperview()
+                make.top.equalToSuperview().offset(100)
+            }
+            
+            randomImageButton.setTitle("랜덤 이미지 생성", for: .normal)
+            randomImageButton.setTitleColor(.gray, for: .normal)
+            randomImageButton.addTarget(self, action: #selector(randomImageButtonTapped), for: .touchUpInside)
+            
+            view.addSubview(randomImageButton)
+            
+            randomImageButton.snp.makeConstraints { make in
+                make.top.equalTo(profileImageView.snp.bottom).offset(16)
+                make.centerX.equalToSuperview()
+            }
+            
+            nameTextView.layer.borderWidth = 1
+            nameTextView.layer.borderColor = UIColor.lightGray.cgColor
+            nameTextView.layer.cornerRadius = 5
+            
+            view.addSubview(nameTextView)
+            
+            nameTextView.snp.makeConstraints { make in
+                make.top.equalTo(randomImageButton.snp.bottom).offset(20)
+                make.left.equalToSuperview().offset(16)
+                make.right.equalToSuperview().offset(-16)
+                make.height.equalTo(40)
+            }
+            
+            phoneNumberTextView.layer.borderWidth = 1
+            phoneNumberTextView.layer.borderColor = UIColor.lightGray.cgColor
+            phoneNumberTextView.layer.cornerRadius = 5
+            
+            view.addSubview(phoneNumberTextView)
+            
+            phoneNumberTextView.snp.makeConstraints { make in
+                make.top.equalTo(nameTextView.snp.bottom).offset(20)
+                make.left.equalToSuperview().offset(16)
+                make.right.equalToSuperview().offset(-16)
+                make.height.equalTo(40)
             }
         }
-        task.resume()
-    }
-}
-
-extension UIImageView {
-    func loadImage(from url: URL) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else { return }
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data)
+        
+        @objc func randomImageButtonTapped() {
+            print("DEBUG: Random Image Button Tapped.")
+            let randomID = Int.random(in: 1...1000)
+            let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(randomID)")!
+            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, error == nil else {
+                    print("DEBUG: \(String(describing: error)) Failed To Load.")
+                    return
+                }
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let sprites = json["sprites"] as? [String: Any],
+                       let imageUrlString = sprites["front_default"] as? String,
+                       let imageUrl = URL(string: imageUrlString) {
+                        DispatchQueue.main.async {
+                            self.profileImageView.loadImage(from: imageUrl)
+                            
+                        }
+                    }
+                } catch {
+                    print("DEBUG: \(error) Error Occured.")
+                }
             }
-        }.resume()
+            task.resume()
+        }
     }
-}
+    
+    extension UIImageView {
+        func loadImage(from url: URL) {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                guard let data = data, error == nil else { return }
+                DispatchQueue.main.async {
+                    self.image = UIImage(data: data)
+                }
+            }.resume()
+        }
+    }

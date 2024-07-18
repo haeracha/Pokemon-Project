@@ -73,14 +73,14 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
             contacts = try context.fetch(fetchRequest)
             tableView.reloadData()
         } catch {
-            print("DEBUG: Failed To Fetch Contacts. \(error.localizedDescription)")
+            print("DEBUG: 연락처 불러오기 실패. \(error.localizedDescription).")
         }
     }
     
     @objc func addButtonTapped() {
         let addPage = AddViewController()
         navigationController?.pushViewController(addPage, animated: true)
-        print("DEBUG: Add Button Tapped.")
+        print("DEBUG: 추가 버튼을 눌렀습니다.")
     }
     
     func setupTableView() {
@@ -113,7 +113,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.profileImageView.image = UIImage(named: "profile_placeholder")
         cell.nameLabel.text = contact.name
         cell.phoneNumberLabel.text = contact.phoneNumber
-        
+
         let separatorWidth: CGFloat = 368
         let separatorHeight: CGFloat = 1
         let separator = UIView(frame: CGRect(x: (cell.frame.width - separatorWidth) / 2, y: cell.frame.height - separatorHeight, width: separatorWidth, height: separatorHeight))
@@ -196,7 +196,7 @@ class AddViewController: UIViewController {
         view.backgroundColor = .white
         setupNavigationBar()
         setupUI()
-        
+
         if let contact = contact {
             nameTextView.text = contact.name
             phoneNumberTextView.text = contact.phoneNumber
@@ -220,10 +220,9 @@ class AddViewController: UIViewController {
     }
         
         @objc func doneButtonTapped() {
-            print("DEBUG: Done Button Tapped.")
+            print("DEBUG: 적용 버튼을 눌렀습니다.")
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
             let context = appDelegate.persistentContainer.viewContext
-            
             
             if let contact = contact {
                 contact.name = nameTextView.text
@@ -240,6 +239,7 @@ class AddViewController: UIViewController {
                     newContact.profileImage = imageData
                 }
             }
+            
             do {
                 try context.save()
                 if let viewController = navigationController?.viewControllers.first(where: { $0 is ContactViewController }) as? ContactViewController {
@@ -247,7 +247,7 @@ class AddViewController: UIViewController {
                 }
                 navigationController?.popViewController(animated: true)
             } catch {
-                print("DEBUG: Failed To Save Contact.")
+                print("DEBUG: 연락처 저장 실패.")
             }
         }
         
@@ -305,12 +305,12 @@ class AddViewController: UIViewController {
         }
         
         @objc func randomImageButtonTapped() {
-            print("DEBUG: Random Image Button Tapped.")
+            print("DEBUG: 랜덤 이미지 버튼을 눌렀습니다.")
             let randomID = Int.random(in: 1...1000)
             let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(randomID)")!
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 guard let data = data, error == nil else {
-                    print("DEBUG: \(String(describing: error)) Failed To Load.")
+                    print("DEBUG: \(String(describing: error)) 로드 실패.")
                     return
                 }
                 do {
@@ -323,7 +323,7 @@ class AddViewController: UIViewController {
                         }
                     }
                 } catch {
-                    print("DEBUG: \(error) Error Occured.")
+                    print("DEBUG: \(error) 발생.")
                 }
             }
             task.resume()

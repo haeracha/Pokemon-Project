@@ -4,5 +4,6 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="phoneNumber" optional="YES" attributeType="String"/>
         <attribute name="profileImage" optional="YES" attributeType="Binary"/>
+        <attribute name="subName" optional="YES" attributeType="String"/>
     </entity>
 </model>

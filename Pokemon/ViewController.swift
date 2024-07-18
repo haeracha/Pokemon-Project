@@ -13,6 +13,7 @@ let profileImageView = UIImageView()
 let randomImageButton = UIButton()
 let nameTextView = UITextView()
 let phoneNumberTextView = UITextView()
+let subNameTextView = UITextView()
 
 class ContactViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -54,6 +55,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
     func loadContactDetails() {
         if let contact = contact {
             nameTextView.text = contact.name
+            subNameTextView.text = contact.subName
             phoneNumberTextView.text = contact.phoneNumber
             if let profileImageData = contact.profileImage {
                 profileImageView.image = UIImage(data: profileImageData)
@@ -113,6 +115,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.profileImageView.image = UIImage(named: "profile_placeholder")
         cell.nameLabel.text = contact.name
         cell.phoneNumberLabel.text = contact.phoneNumber
+        cell.subNameLabel.text = contact.subName
 
         let separatorWidth: CGFloat = 368
         let separatorHeight: CGFloat = 1
@@ -128,6 +131,7 @@ class ContactViewController: UIViewController, UITableViewDataSource, UITableVie
         
         cell.nameLabel.text = contact.name ?? "이름없음"
         cell.phoneNumberLabel.text = contact.phoneNumber ?? "번호없음"
+        cell.subNameLabel.text = contact.subName ?? ""
         return cell
     }
     
@@ -141,6 +145,7 @@ class ContactCell: UITableViewCell {
     let profileImageView = UIImageView()
     let nameLabel = UILabel()
     let phoneNumberLabel = UILabel()
+    let subNameLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -156,6 +161,7 @@ class ContactCell: UITableViewCell {
         contentView.addSubview(profileImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(phoneNumberLabel)
+        contentView.addSubview(subNameLabel)
         
         profileImageView.layer.cornerRadius = 30
         profileImageView.clipsToBounds = true
@@ -179,6 +185,13 @@ class ContactCell: UITableViewCell {
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().offset(-16)
         }
+        
+        subNameLabel.font = UIFont.systemFont(ofSize: 12)
+        subNameLabel.textColor = .red
+        subNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(4)
+            make.leading.equalTo(nameLabel.snp.leading)
+        }
     }
 }
 
@@ -189,6 +202,7 @@ class AddViewController: UIViewController {
     let randomImageButton = UIButton()
     let nameTextView = UITextView()
     let phoneNumberTextView = UITextView()
+    let subNameTextView = UITextView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,6 +214,7 @@ class AddViewController: UIViewController {
         if let contact = contact {
             nameTextView.text = contact.name
             phoneNumberTextView.text = contact.phoneNumber
+            subNameTextView.text = contact.subName
             if let imageData = contact.profileImage {
                 profileImageView.image = UIImage(data: imageData)
             }
@@ -208,6 +223,7 @@ class AddViewController: UIViewController {
         func configureView(with contact: Contact) {
             nameTextView.text = contact.name
             phoneNumberTextView.text = contact.phoneNumber
+            subNameTextView.text = contact.subName
             if let imageData = contact.profileImage {
                 profileImageView.image = UIImage(data: imageData)
             }
@@ -227,6 +243,7 @@ class AddViewController: UIViewController {
             if let contact = contact {
                 contact.name = nameTextView.text
                 contact.phoneNumber = phoneNumberTextView.text
+                contact.subName = subNameTextView.text
                 if let imageData = profileImageView.image?.pngData() {
                     contact.profileImage = imageData
                 }
@@ -234,6 +251,7 @@ class AddViewController: UIViewController {
                 let newContact = Contact(context: context)
                 newContact.name = nameTextView.text
                 newContact.phoneNumber = phoneNumberTextView.text
+                newContact.subName = subNameTextView.text
                 
                 if let imageData = profileImageView.image?.pngData() {
                     newContact.profileImage = imageData
@@ -302,12 +320,25 @@ class AddViewController: UIViewController {
                 make.right.equalToSuperview().offset(-16)
                 make.height.equalTo(40)
             }
+            
+            subNameTextView.layer.borderWidth = 1
+            subNameTextView.layer.borderColor = UIColor.lightGray.cgColor
+            subNameTextView.layer.cornerRadius = 5
+            
+            view.addSubview(subNameTextView)
+            
+            subNameTextView.snp.makeConstraints { make in
+                make.top.equalTo(phoneNumberTextView.snp.bottom).offset(20)
+                make.left.equalToSuperview().offset(16)
+                make.right.equalToSuperview().offset(-16)
+                make.height.equalTo(40)
+            }
         }
         
         @objc func randomImageButtonTapped() {
             print("DEBUG: 랜덤 이미지 버튼을 눌렀습니다.")
             let randomID = Int.random(in: 1...1000)
-            let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(randomID)")!
+            let url = URL(string: "https://pokeapi.co/api/v2/pokemon/151")!
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 guard let data = data, error == nil else {
                     print("DEBUG: \(String(describing: error)) 로드 실패.")

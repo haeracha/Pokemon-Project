@@ -338,7 +338,7 @@ class AddViewController: UIViewController {
         @objc func randomImageButtonTapped() {
             print("DEBUG: 랜덤 이미지 버튼을 눌렀습니다.")
             let randomID = Int.random(in: 1...1000)
-            let url = URL(string: "https://pokeapi.co/api/v2/pokemon/151")!
+            let url = URL(string: "https://pokeapi.co/api/v2/pokemon/\(randomID)")!
             let task = URLSession.shared.dataTask(with: url) { data, response, error in
                 guard let data = data, error == nil else {
                     print("DEBUG: \(String(describing: error)) 로드 실패.")
